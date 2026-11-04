@@ -20,7 +20,10 @@ Deadline: **5 Nov 2026, 13:00** (IST). Reply to the Appagentix / OneGTM Lab task
 3. HubSpot company **OpenAI**: description, industry, annual revenue, employees,
    city/state/country, LinkedIn URL all filled.
 4. OpenAI company → Contacts tab: **5 contacts** with job titles, LinkedIn URLs,
-   locations; at least one with email and phone.
+   locations. Reference state recorded on 4 Nov: work emails on 3 of 5
+   (`amin@`, `harrison@`, `brad@openai.com`) and one mobile (`+15104026750`). Forager has
+   no mobile for the other four at either `quality_tier`, and no email at all for Remus
+   Moraru / Wojciech Zaremba — that is a data limit, not a pipeline failure.
 5. A contact record shows the custom properties `Forager Person ID`, `Forager Headline`,
    `Forager Skills`, `Forager Seniority`, `Forager Enriched At`.
 6. Repo README renders on GitHub and the video link in the email is public (unlisted is

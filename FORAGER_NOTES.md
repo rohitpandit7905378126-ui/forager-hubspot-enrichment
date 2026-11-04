@@ -127,6 +127,19 @@ are already enriched.
 - Pages are zero-based and one page is 10 rows; `page: 1` is fetched when fewer than the
   requested number of people come back.
 
+## 8b. `completed` does not mean "found"
+
+Two different empty outcomes are worth distinguishing when reading job results:
+
+- `status: completed` with `emails: []` — the lookup really ran and Forager has **no**
+  address for that person. Retrying is pointless.
+- `status: failed`, `error_code: no_current_employer` — Forager could not attribute the
+  person to a company, so try the other identity (name + domain instead of LinkedIn).
+
+Concrete example from this build: Remus Moraru (OpenAI, Applied AI Research Manager) comes
+back `completed` with an empty array over both routes, while Wojciech Zaremba comes back
+`failed / no_current_employer` on the LinkedIn-only route. Neither is a bug in the client.
+
 ## 9. Running out of credits is a bare 402 with no balance endpoint
 
 ```
