@@ -6,6 +6,13 @@ it — graders skim.
 
 ---
 
+## Quick path
+
+Prefer copy-paste commands for every shot? Use `VIDEO_COMMANDS.md` — it has the exact
+PowerShell/curl lines, including the signed replay.
+
+---
+
 ## 0:00 – 0:40  What this is
 
 > "This is a Python FastAPI service that keeps HubSpot enriched from Forager. Two HubSpot
