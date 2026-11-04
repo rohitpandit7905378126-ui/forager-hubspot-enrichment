@@ -77,6 +77,28 @@ the flow on a fresh company. Fewer contacts, only matching titles. Change it bac
 
 ---
 
+## If the HubSpot subscription is not available (fallback path)
+
+A legacy private app cannot have webhook subscriptions created through an API — HubSpot
+only allows editing them by hand in the app's Webhooks tab. If that tab is not usable on
+this portal, do not fake a result. Say this on camera:
+
+> "HubSpot sends this exact payload when a company is created. I'm replaying the same
+> payload at the receiver, because subscriptions on this legacy private app can only be
+> configured by hand and this portal does not expose the tab. Everything after the POST
+> is the real handler: real signature check, real Forager calls, real HubSpot writes."
+
+Then run:
+
+```bash
+python scripts/replay_hubspot_webhook.py company.creation <company_id>
+```
+
+The same script proves the security path: with `HUBSPOT_CLIENT_SECRET` set it signs the
+request with the v3 HMAC scheme. Show one unsigned/wrong-secret run returning **401**,
+then the correctly signed run returning **200**. That is stronger evidence than a
+subscription firing, because it shows the rejection path too.
+
 ## 5:00 – 5:45  Reliability, in 45 seconds
 
 - Create the same company twice → the log says `contact.skip` / already enriched, and the
