@@ -254,3 +254,22 @@ See [`FORAGER_NOTES.md`](FORAGER_NOTES.md) for the full list, including:
   with an email and no mobile.
 - Only `company.creation` and `contact.creation` are consumed. Property-change
   subscriptions are ignored on purpose to keep credit spend predictable.
+
+### Credit state during the demo build
+
+The free Forager balance (150 credits) was spent while building and testing this service,
+and Forager then returns `402 {"message":"The account does not have sufficient credits
+remaining."}` on every lookup. The service detects that and pauses cleanly instead of
+retrying in a loop (`forager_credits_exhausted` on `GET /`). Two consequences worth
+knowing:
+
+- The HubSpot demo records were enriched while credits were live. They keep their data.
+- A grader triggering a *new* webhook against this deployment will get a 200 from the
+  service plus a `credits` entry in `/activity`, not fresh enrichment, until the balance
+  is topped up.
+
+Fill gaps later without re-spending on person/phone lookups:
+
+```bash
+python -m scripts.backfill_emails     # contacts with a Forager id but no email
+```

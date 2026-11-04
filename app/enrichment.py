@@ -232,6 +232,18 @@ class EnrichmentService:
         self._pending_email_jobs: Dict[str, str] = {}
         self._background_tasks: Set[Any] = set()
         self.credits_spent = 0
+        self.credits_exhausted = False
+
+    def note_forager_error(self, exc: Exception) -> None:
+        """A 402 means the Forager credit balance is empty: stop burning API calls."""
+        message = str(exc).lower()
+        if "insufficient credits" in message or "not have sufficient credits" in message:
+            if not self.credits_exhausted:
+                self.credits_exhausted = True
+                self.activity.add(
+                    "credits",
+                    "Forager credit balance is empty - enrichment paused until credits are topped up",
+                )
 
     async def aclose(self) -> None:
         await self.forager.aclose()
@@ -562,6 +574,8 @@ class EnrichmentService:
         discover: Optional[bool] = None,
         enrich_contacts: Optional[bool] = None,
     ) -> Dict[str, Any]:
+        if self.credits_exhausted:
+            return {"status": "skipped", "reason": "Forager credits exhausted"}
         key = f"company:{company_id}"
         if not force and self.settings.skip_already_enriched and key in self._processed:
             return {"status": "skipped", "reason": "already processed in this process"}
@@ -786,6 +800,8 @@ class EnrichmentService:
         person_hint: Optional[Dict[str, Any]] = None,
         role_hint: Optional[Dict[str, Any]] = None,
     ) -> Dict[str, Any]:
+        if self.credits_exhausted:
+            return {"status": "skipped", "reason": "Forager credits exhausted"}
         key = f"contact:{contact_id}"
         if not force and self.settings.skip_already_enriched and key in self._processed:
             return {"status": "skipped", "reason": "already processed in this process"}
@@ -943,6 +959,7 @@ class EnrichmentService:
                 else:
                     summary["ignored"] += 1
             except (HubSpotError, ForagerError) as exc:
+                self.note_forager_error(exc)
                 summary["errors"] += 1
                 log.exception("Webhook handling failed for %s %s", subscription_type, object_id)
                 self.activity.add(

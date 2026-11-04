@@ -105,6 +105,7 @@ async def index(request: Request) -> Dict[str, Any]:
         },
         "config": settings.public_summary(),
         "estimated_credits_spent_this_process": service.credits_spent,
+        "forager_credits_exhausted": service.credits_exhausted,
     }
 
 

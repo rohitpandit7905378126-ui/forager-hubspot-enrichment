@@ -127,7 +127,21 @@ are already enriched.
 - Pages are zero-based and one page is 10 rows; `page: 1` is fetched when fewer than the
   requested number of people come back.
 
-## 9. What would need a paid/dedicated plan
+## 9. Running out of credits is a bare 402 with no balance endpoint
+
+```
+POST /datastorage/person_detail_lookup/  ->  402
+{"message": "The account does not have sufficient credits remaining."}
+```
+
+There is no documented (or discoverable) endpoint that reports a balance or a usage
+history: `/api/{account_id}/credits/`, `/account/`, `/users/me/` all 404. The only place
+to see the number is the dashboard, so a service cannot pre-check whether a lookup will be
+chargeable. The practical fix is to be conservative client side: skip records that are
+already enriched, check "does this contact already have an email/phone?" before calling,
+and treat a 402 as terminal for the run rather than retrying.
+
+## 10. What would need a paid/dedicated plan
 
 - Email verification latency: the upstream queue is the bottleneck, not the API.
 - Phone coverage: thin for many companies, so a waterfall (second provider) would be
