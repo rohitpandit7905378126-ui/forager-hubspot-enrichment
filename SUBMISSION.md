@@ -8,7 +8,7 @@ Deadline: **5 Nov 2026, 13:00** (IST). Reply to the Appagentix / OneGTM Lab task
 |---|---|---|
 | Demo video | record from `DEMO_SCRIPT.md` | link to share |
 | Live deployment URL | deploy on Railway, then paste | `https://<railway-domain>/health` |
-| GitHub repo | push this folder | `https://github.com/<you>/forager-hubspot-enrichment` |
+| GitHub repo | **live** | https://github.com/rohitpandit7905378126-ui/forager-hubspot-enrichment |
 | HubSpot portal with OpenAI company + 5 enriched contacts | done (portal 247887031) | Companies → OpenAI |
 | Note on extra Forager details | written | `FORAGER_NOTES.md` |
 | CV attached | attach the original file | reply email |
@@ -38,7 +38,7 @@ Subject: **GTM Engineer evaluation — Forager × HubSpot enrichment service**
 > Submitting the Forager × HubSpot enrichment task.
 >
 > **Live service:** https://<railway-domain>/health
-> **Repo:** https://github.com/<you>/forager-hubspot-enrichment
+> **Repo:** https://github.com/rohitpandit7905378126-ui/forager-hubspot-enrichment
 > **Demo video:** <link>
 >
 > It's a Python FastAPI service (no no-code tools) with two HubSpot webhooks:
