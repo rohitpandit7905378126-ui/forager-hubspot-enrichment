@@ -11,6 +11,8 @@ Deadline: **5 Nov 2026, 13:00** (IST). Reply to the Appagentix / OneGTM Lab task
 | GitHub repo | **live** | https://github.com/rohitpandit7905378126-ui/forager-hubspot-enrichment |
 | HubSpot portal with OpenAI company + 5 enriched contacts | done (portal 247887031) | Companies → OpenAI |
 | Note on extra Forager details | written | `FORAGER_NOTES.md` |
+| Webhook signature verification | **live and enforcing** | unsigned or wrong-secret POST -> 401, valid v3 HMAC -> 200 |
+| Job-title filter for contact discovery | done | `app/titles.py`, `TARGET_TITLES` in Railway |
 | CV attached | attach the original file | reply email |
 
 ## Pre-send check (10 minutes)
@@ -28,6 +30,9 @@ Deadline: **5 Nov 2026, 13:00** (IST). Reply to the Appagentix / OneGTM Lab task
    `Forager Skills`, `Forager Seniority`, `Forager Enriched At`.
 6. Repo README renders on GitHub and the video link in the email is public (unlisted is
    fine, "request access" is not).
+7. Signature proof still holds: `curl -X POST .../webhooks/hubspot -d "[]"` returns 401,
+   and `HUBSPOT_CLIENT_SECRET=<railway value> python scripts/replay_hubspot_webhook.py
+   company.creation 999999999999` returns 200 (a fake id, so no Forager credits burn).
 
 ## Email draft
 
@@ -76,6 +81,20 @@ Subject: **GTM Engineer evaluation — Forager × HubSpot enrichment service**
 - 16 variables set, including `FORAGER_ACCOUNT_ID=2846` and `PUBLIC_BASE_URL`
 - Deployed with `railway up`; the repo is not wired to Railway auto-deploy, so a code
   change needs another `railway up` (or connect the repo under Settings → Source)
+
+## Proving it works without a portal subscription
+
+`scripts/replay_hubspot_webhook.py` posts the exact payload shape HubSpot sends. It is a
+true replay, not a simulation of the result: the receiver, signature check, Forager calls
+and HubSpot writes are all the production code path.
+
+```bash
+python scripts/replay_hubspot_webhook.py company.creation <company_id>                        # 401
+HUBSPOT_CLIENT_SECRET=wrong python scripts/replay_hubspot_webhook.py company.creation <id>     # 401
+HUBSPOT_CLIENT_SECRET=<railway value> python scripts/replay_hubspot_webhook.py company.creation <id>  # 200
+```
+
+Verified on the live deployment: `401`, `401`, then `200 {"received":1,"queued":1}`.
 
 ## If Railway is not up yet
 

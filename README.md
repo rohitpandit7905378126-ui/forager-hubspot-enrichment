@@ -37,6 +37,16 @@ Both flows are idempotent: a record that already carries `forager_enriched_at` (
 
 ---
 
+## Webhook security
+
+`/webhooks/hubspot` verifies the HubSpot v3 signature whenever `HUBSPOT_CLIENT_SECRET` is
+set: HMAC-SHA256 over `method + full request URL + raw body + timestamp`, base64 encoded,
+compared with `hmac.compare_digest`, and a 300 second timestamp window. Header names:
+`X-HubSpot-Signature-v3` and `X-HubSpot-Request-Timestamp`. The body is read raw before
+parsing so the HMAC covers the exact bytes HubSpot signed.
+
+Live deployment status: **enforcing** (unsigned request -> 401, valid signature -> 200).
+
 ## 2. Architecture
 
 ```

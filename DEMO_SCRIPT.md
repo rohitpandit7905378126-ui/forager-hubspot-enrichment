@@ -27,8 +27,16 @@ HubSpot webhook → signature check → 200 ACK → background task
 Forager email job → callback / background poll → contact patched
 ```
 
-Mention: "webhook ACKs in milliseconds because Forager calls take seconds; wrong
-signature is rejected with 401." (You already tested 401 vs 200 — no need to prove it.)
+Mention: "webhook ACKs in milliseconds because Forager calls take seconds". Signature
+verification is **enforced on the live deployment** — show it (20 seconds, no credits):
+
+```bash
+curl -X POST https://web-production-2f924.up.railway.app/webhooks/hubspot -H "Content-Type: application/json" -d "[]"
+# {"detail":"invalid signature"} 401
+
+HUBSPOT_CLIENT_SECRET=<value> python scripts/replay_hubspot_webhook.py company.creation <id>
+# 200 {"received":1,"queued":1}
+```
 
 ---
 
