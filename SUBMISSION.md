@@ -7,7 +7,7 @@ Deadline: **5 Nov 2026, 13:00** (IST). Reply to the Appagentix / OneGTM Lab task
 | Required | Status | Where |
 |---|---|---|
 | Demo video | record from `DEMO_SCRIPT.md` | link to share |
-| Live deployment URL | deploy on Railway, then paste | `https://<railway-domain>/health` |
+| Live deployment URL | **live** | https://web-production-2f924.up.railway.app/health |
 | GitHub repo | **live** | https://github.com/rohitpandit7905378126-ui/forager-hubspot-enrichment |
 | HubSpot portal with OpenAI company + 5 enriched contacts | done (portal 247887031) | Companies → OpenAI |
 | Note on extra Forager details | written | `FORAGER_NOTES.md` |
@@ -15,8 +15,8 @@ Deadline: **5 Nov 2026, 13:00** (IST). Reply to the Appagentix / OneGTM Lab task
 
 ## Pre-send check (10 minutes)
 
-1. `https://<railway-domain>/health` returns `{"status":"healthy"}`.
-2. `https://<railway-domain>/` shows the config summary with no secrets.
+1. `https://web-production-2f924.up.railway.app/health` returns `{"status":"healthy"}`.
+2. `https://web-production-2f924.up.railway.app/` shows the config summary with no secrets.
 3. HubSpot company **OpenAI**: description, industry, annual revenue, employees,
    city/state/country, LinkedIn URL all filled.
 4. OpenAI company → Contacts tab: **5 contacts** with job titles, LinkedIn URLs,
@@ -37,7 +37,7 @@ Subject: **GTM Engineer evaluation — Forager × HubSpot enrichment service**
 >
 > Submitting the Forager × HubSpot enrichment task.
 >
-> **Live service:** https://<railway-domain>/health
+> **Live service:** https://web-production-2f924.up.railway.app/health
 > **Repo:** https://github.com/rohitpandit7905378126-ui/forager-hubspot-enrichment
 > **Demo video:** <link>
 >
@@ -69,6 +69,14 @@ Subject: **GTM Engineer evaluation — Forager × HubSpot enrichment service**
 > Rohit Sharma
 > Sharma Digital Agency · +91 95962 78126
 
+## Railway project
+
+- Project: `forager-hubspot-enrichment` (service `web`)
+- URL: https://web-production-2f924.up.railway.app
+- 16 variables set, including `FORAGER_ACCOUNT_ID=2846` and `PUBLIC_BASE_URL`
+- Deployed with `railway up`; the repo is not wired to Railway auto-deploy, so a code
+  change needs another `railway up` (or connect the repo under Settings → Source)
+
 ## If Railway is not up yet
 
 Send the repo + video + a local run screenshot instead, and say the deployment URL is
@@ -82,7 +90,7 @@ HUBSPOT_PRIVATE_APP_TOKEN=pat-...
 FORAGER_API_KEY=...
 FORAGER_ACCOUNT_ID=2845
 HUBSPOT_CLIENT_SECRET=...
-PUBLIC_BASE_URL=https://<railway-domain>
+PUBLIC_BASE_URL=https://web-production-2f924.up.railway.app
 TARGET_TITLES=ceo,cto,cmo,coo,cro,cfo,founder,co-founder,owner,president,vice president,vp,head,director,chief,partner,principal,manager
 MAX_CONTACTS_PER_COMPANY=5
 ENABLE_WORK_EMAIL_LOOKUP=true

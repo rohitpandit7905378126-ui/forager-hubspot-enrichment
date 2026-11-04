@@ -8,6 +8,8 @@ Built for the Appagentix / OneGTM Lab GTM Engineer evaluation task.
 
 ---
 
+**Live:** https://web-production-2f924.up.railway.app/health
+
 ## 1. What it does
 
 ### Trigger A — `company.creation`
