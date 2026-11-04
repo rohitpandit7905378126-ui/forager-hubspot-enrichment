@@ -28,6 +28,7 @@ run once with a wrong secret, once with the right one.
 
 from __future__ import annotations
 
+import base64
 import hashlib
 import hmac
 import json
@@ -61,8 +62,10 @@ def build_event(subscription_type: str, object_id: str) -> list[dict]:
 
 
 def sign(secret: str, method: str, uri: str, body: bytes, timestamp: str) -> str:
+    """HubSpot v3: base64(HMAC-SHA256(secret, method + full uri + body + timestamp))."""
     source = f"{method}{uri}{body.decode()}{timestamp}".encode()
-    return hmac.new(secret.encode(), source, hashlib.sha256).hexdigest()
+    digest = hmac.new(secret.encode(), source, hashlib.sha256).digest()
+    return base64.b64encode(digest).decode()
 
 
 def main() -> int:
@@ -79,7 +82,7 @@ def main() -> int:
     headers = {"Content-Type": "application/json"}
     if secret:
         timestamp = str(int(time.time() * 1000))
-        headers["X-HubSpot-Signature-v3"] = sign(secret, "POST", WEBHOOK_PATH, body, timestamp)
+        headers["X-HubSpot-Signature-v3"] = sign(secret, "POST", url, body, timestamp)
         headers["X-HubSpot-Request-Timestamp"] = timestamp
 
     request = urllib.request.Request(url, data=body, headers=headers, method="POST")
