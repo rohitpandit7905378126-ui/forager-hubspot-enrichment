@@ -123,6 +123,47 @@ async def activity(request: Request, limit: int = 50) -> Dict[str, Any]:
     }
 
 
+@app.get("/webhooks/hubspot")
+async def hubspot_webhook_info() -> JSONResponse:
+    """Browser-friendly explanation of the receiver.
+
+    HubSpot only ever POSTs here. Opening the URL in a browser sends GET, and
+    without this route that looks like a broken endpoint ("Method Not Allowed").
+    """
+    enforcing = bool(settings.hubspot_client_secret)
+    return JSONResponse(
+        {
+            "endpoint": "HubSpot webhook receiver",
+            "status": "live and listening",
+            "method_required": "POST",
+            "why_you_see_this_page": (
+                "You opened the URL in a browser, which sends GET. HubSpot sends POST, "
+                "so this page is only an explanation of the endpoint."
+            ),
+            "signature_verification": "enforced" if enforcing else "disabled (HUBSPOT_CLIENT_SECRET not set)",
+            "handles_events": ["company.creation", "contact.creation"],
+            "expected_payload": [
+                {
+                    "subscriptionType": "company.creation",
+                    "objectId": "360217205438",
+                    "eventId": "1",
+                    "portalId": 247887031,
+                }
+            ],
+            "how_to_test": {
+                "curl": (
+                    "curl -X POST '" + settings.public_base_url + "/webhooks/hubspot' "
+                    "-H 'Content-Type: application/json' "
+                    "-d '[{\"subscriptionType\":\"company.creation\",\"objectId\":\"<company_id>\"}]'"
+                ),
+                "browser_friendly": "POST /enrich/company/{company_id} or watch GET /activity",
+            },
+            "see_what_happened": "/activity",
+            "health": "/health",
+        }
+    )
+
+
 @app.post("/webhooks/hubspot")
 async def hubspot_webhook(request: Request, background: BackgroundTasks) -> JSONResponse:
     raw = await request.body()
