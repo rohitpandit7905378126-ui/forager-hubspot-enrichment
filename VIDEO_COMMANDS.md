@@ -1,5 +1,25 @@
 # Copy-paste commands for the demo video
 
+## The whole video, in order
+
+| # | What you do | Where | Expected |
+|---|---|---|---|
+| 1 | Start recording, say who you are and what the service does | GitHub repo tab | — |
+| 2 | Describe the pipeline: HubSpot -> service -> Forager -> back to HubSpot | README diagram | — |
+| 3 | Unsigned POST | terminal | `401 {"detail":"invalid signature"}` |
+| 4 | Create company `Cursor` / `cursor.com` in HubSpot, copy the id from the URL | HubSpot | empty record |
+| 5 | Signed webhook replay for that id | terminal | `200 {"received":1,"queued":1}` |
+| 6 | Watch the job run | `/activity` tab | `webhook` -> `company.start` -> `company.enriched` -> `discover.search` -> `contact.created` -> `company.done` |
+| 7 | Show the filled company + attached people | HubSpot record | fields + contacts |
+| 8 | Run command 5 again | terminal | `company.done ... 0 created`, no credits |
+| 9 | Show the title filter | `/` | `target_titles`, `title_query` |
+| 10 | Show the Forager findings | `FORAGER_NOTES.md` | — |
+| 11 | Wrap up, stop recording | — | — |
+
+Commands 3, 5 and 8 are below. Steps 4, 7 and 9 are just the browser.
+
+---
+
 Everything below runs against the live deployment. Windows: use **PowerShell** (or
 Command Prompt — both variants given where they differ).
 
