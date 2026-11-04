@@ -1,5 +1,67 @@
 # Demo video script (target: 6–8 minutes)
 
+## How to record it (read this first)
+
+**Do not film the laptop with a phone.** Screen recording plus voice is what a technical
+grader expects; a phone shot of a screen is unreadable at 720p, shows moiré, and looks
+improvised. Record the screen directly.
+
+| Tool | When to use it |
+|---|---|
+| **OBS Studio** (free) | Default choice. 1920x1080, 30fps, mic on, unlimited length. |
+| **Zoom** — share screen, "Record on this computer" | Zero setup, no time limit, good mic capture. |
+| **PowerPoint** → Insert → Screen Recording | Quick and already installed, but harder to narrate cleanly. |
+| Xbox Game Bar (Win+G) | Only as a last resort. Cannot record File Explorer or the desktop. |
+
+**Narration: yes, speak.** Silence with on-screen text reads as unfinished. Speak in clear
+English (the evaluator is an agency, not a Hindi-speaking client), calm pace, no script
+reading — keep a short bullet list next to the screen and say it in your own words. If you
+fumble a sentence, keep going; do not restart the take.
+
+**Before you hit record**
+
+1. Monitor 1920x1080, browser zoom 110%, bookmarks bar hidden (`Ctrl+Shift+B`).
+2. Close every tab that shows a token, key or personal inbox. The HubSpot access token and
+   the Railway dashboard with `HUBSPOT_CLIENT_SECRET` visible must **not** appear on
+   screen — mention them, don't show them.
+3. Terminal: dark theme, font 16pt or larger, `cls` before you start.
+4. Windows → Focus assist on, notifications off, WhatsApp/Outlook closed.
+5. Mic test: record 15 seconds, play it back, confirm no fan noise and no clipping.
+6. Do one full dry run without recording. The second pass is the one you keep.
+
+**Order of windows to prepare (open in this order, before recording)**
+
+1. GitHub repo page (file tree, README)
+2. Terminal, repo cloned, `cd forager-hubspot-enrichment`
+3. `https://web-production-2f924.up.railway.app/` (config summary)
+4. HubSpot → Companies list, and a second HubSpot tab on the empty OpenAI-less company form
+5. `https://web-production-2f924.up.railway.app/activity`
+6. `FORAGER_NOTES.md` in the editor
+
+Face camera from a phone is optional and only for the first 10 seconds if you want a
+personal intro — landscape, window light, eye level, then cut to the screen. Not required.
+
+---
+
+## Narration cheat sheet (say it in your own words, roughly 6:30 total)
+
+| Time | Say roughly this | Show |
+|---|---|---|
+| 0:00 | "Hi, I'm Rohit Sharma. This is a Python FastAPI service that keeps HubSpot enriched from Forager. No n8n, no no-code — all Python, deployed on Railway." | Repo tree |
+| 0:40 | "Two HubSpot webhooks drive it: company creation and contact creation. Signature is checked first, then I return 200 immediately and do Forager work in the background, because Forager calls take seconds and HubSpot will not wait." | README diagram |
+| 1:30 | "Bad signature gets 401. Valid v3 HMAC gets 200 and the job starts. Same URL, same payload." | Terminal, two curl runs |
+| 2:00 | "Now the company flow. I create Cursor in HubSpot with just a domain." | HubSpot form |
+| 2:40 | "That fires company.creation. The service resolves the domain in Forager, writes description, revenue, headcount, industry, then looks for decision makers." | `/activity` |
+| 3:30 | "Back in HubSpot: company fields are filled and the people are attached with titles, LinkedIn, seniority, location." | HubSpot record |
+| 4:00 | "I don't pull every contact. Discovery is filtered to CEO, CTO, founder, VP, head, director, partner — every contact costs credits, so this is a cost decision, not a limitation." | `/` config |
+| 4:40 | "Run it again: nothing is re-enriched, nothing is re-charged. Enrichment state lives on the record." | `/activity` |
+| 5:10 | "Contact flow: Forager work email is an async job, so I ACK, poll, then patch the contact." | Contact record |
+| 5:45 | "Four things the Forager docs do not tell you." | `FORAGER_NOTES.md` |
+| 6:20 | "What I'd add next: a durable queue, retry with backoff, and a per-portal credit budget. Thanks for watching." | Repo README |
+
+---
+
+
 Record with OBS or a plain screen recorder, 1080p, mic on. Keep the HubSpot tab full
 width and the terminal in a second tab. Say what you are about to show *before* you show
 it — graders skim.
